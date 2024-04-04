@@ -6,7 +6,7 @@ DOC_DIR=$(DESTDIR)$(PREFIX)/share/doc/libcrash-bash
 BIN_DIR=$(DESTDIR)$(PREFIX)/lib/libcrash-bash
 
 DOC_FILES=$(wildcard *.rst)
-SCRIPT_FILES=$(wildcard media-tools/*)
+SCRIPT_FILES=$(wildcard crash-bash/*)
 
 all:
 
