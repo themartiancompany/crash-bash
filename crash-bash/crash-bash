@@ -415,23 +415,22 @@ _config_user_init() {
   _share="$( \
     _get_usr)/share"
   _cfg_dir="${HOME}/.config/${_app}"
-  [ ! -d "${_cfg_dir}" ] && \
+  if [ ! -d "${_cfg_dir}" ]; then
     _msg_info \
-      "creating: ${_cfg_dir}" && \
+      "creating: ${_cfg_dir}"
     mkdir \
       -p \
-      "${_cfg_dir}" && \
+      "${_cfg_dir}"
     chmod \
       700 \
       "${_cfg_dir}"
-  [ \
-    -d \
-      "${_share}/${_app}/configs" ] && \
-    cp \
-      -r \
-      "${_share}/${_app}/configs" \
-      "${_cfg_dir}/" || \
-  true
+    [ -d "${_share}/${_app}/configs" ] && \
+      cp \
+        -r \
+        "${_share}/${_app}/configs" \
+        "${_cfg_dir}/" || \
+    true
+  fi
 }
 
 # vim:set sw=2 sts=-1 et:
