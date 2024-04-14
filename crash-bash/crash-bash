@@ -409,14 +409,12 @@ _sho() {
 
 _config_user_init() {
   local \
+    _app="${1}" \
     _cfg_dir \
     _share
   _share="$( \
     _get_usr)/share"
-  _cfg_dir="${HOME}/.config/$( \
-    _get \
-      "app" \
-      "name")"
+  _cfg_dir="${HOME}/.config/${_app}"
   [ ! -e "${_cfg_dir}" ] && \
     mkdir \
       -p \
@@ -426,14 +424,10 @@ _config_user_init() {
       "${_cfg_dir}"
   [ \
     -e \
-      "${_share}/$(_get \
-        "app" \
-        "name")/configs" ] && \
+      "${_share}/${_app}/configs" ] && \
     cp \
       -r \
-      "${_share}/$(_get \
-        "app" \
-        "name")/configs" \
+      "${_share}/${_app}/configs" \
       "${_cfg_dir}" || \
   true
 }
