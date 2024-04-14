@@ -423,14 +423,19 @@ _config_user_init() {
       "${_cfg_dir}" && \
     chmod \
       700 \
-      "${_cfg_dir}" && \
+      "${_cfg_dir}"
+  [ \
+    -e \
+      "${_share}/$(_get \
+        "app" \
+        "name")/configs" ] && \
     cp \
       -r \
       "${_share}/$(_get \
         "app" \
         "name")/configs" \
       "${_cfg_dir}" || \
-    true
+  true
 }
 
 # vim:set sw=2 sts=-1 et:
