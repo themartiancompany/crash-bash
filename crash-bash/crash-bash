@@ -415,7 +415,9 @@ _config_user_init() {
   _share="$( \
     _get_usr)/share"
   _cfg_dir="${HOME}/.config/${_app}"
-  [ ! -e "${_cfg_dir}" ] && \
+  [ ! -d "${_cfg_dir}" ] && \
+    _msg_info \
+      "creating: ${_cfg_dir}" && \
     mkdir \
       -p \
       "${_cfg_dir}" && \
@@ -428,7 +430,7 @@ _config_user_init() {
     cp \
       -r \
       "${_share}/${_app}/configs" \
-      "${_cfg_dir}" || \
+      "${_cfg_dir}/" || \
   true
 }
 
