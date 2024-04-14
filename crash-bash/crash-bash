@@ -425,9 +425,11 @@ _config_user_init() {
       700 \
       "${_cfg_dir}"
     [ -d "${_share}/${_app}/configs" ] && \
+      _msg_info \
+        "copying system config files..."
       cp \
         -r \
-        "${_share}/${_app}/configs" \
+        "${_share}/${_app}/configs/"* \
         "${_cfg_dir}/" || \
     true
   fi
