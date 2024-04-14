@@ -409,10 +409,14 @@ _sho() {
 
 _config_user_init() {
   local \
-    _cfg_dir
-  _cfg_dir="${HOME}/.config/$(_get \
-                                "app" \
-                                "name")"
+    _cfg_dir \
+    _share
+  _share="$( \
+    _get_usr)/share"
+  _cfg_dir="${HOME}/.config/$( \
+    _get \
+      "app" \
+      "name")"
   [ ! -e "${_cfg_dir}" ] && \
     mkdir \
       -p \
@@ -421,11 +425,12 @@ _config_user_init() {
       700 \
       "${_cfg_dir}" && \
     cp \
-      "${_share}/media-tools/configs/ffmpeg_options" \
+      -r \
+      "${_share}/$(_get \
+        "app" \
+        "name")/configs" \
       "${_cfg_dir}" || \
     true
 }
-
-
 
 # vim:set sw=2 sts=-1 et:
