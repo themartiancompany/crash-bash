@@ -58,6 +58,18 @@ _globals() {
   app_name="${0##*/}"
 }
 
+_get_bin() {
+  dirname \
+    "$(command \
+         -v \
+         "env")"
+}
+
+_get_usr() {
+  dirname \
+    "$(_get_bin)"
+}
+
 # Show an INFO message
 # $1: message string
 _msg_info() {
@@ -394,5 +406,26 @@ _sho() {
     "%s\n" \
     "${_text}"
 }
+
+_config_user_init() {
+  local \
+    _cfg_dir
+  _cfg_dir="${HOME}/.config/$(_get \
+                                "app" \
+                                "name")"
+  [ ! -e "${_cfg_dir}" ] && \
+    mkdir \
+      -p \
+      "${_cfg_dir}" && \
+    chmod \
+      700 \
+      "${_cfg_dir}" && \
+    cp \
+      "${_share}/media-tools/configs/ffmpeg_options" \
+      "${_cfg_dir}" || \
+    true
+}
+
+
 
 # vim:set sw=2 sts=-1 et:
