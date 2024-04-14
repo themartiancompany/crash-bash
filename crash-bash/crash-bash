@@ -425,7 +425,7 @@ _config_user_init() {
       700 \
       "${_cfg_dir}"
   [ \
-    -e \
+    -d \
       "${_share}/${_app}/configs" ] && \
     cp \
       -r \
