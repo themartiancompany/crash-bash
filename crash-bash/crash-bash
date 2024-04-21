@@ -435,6 +435,31 @@ _config_user_init() {
   fi
 }
 
+_options_load() {
+  local \
+    _name="${1}"
+  _set \
+    "${_name}" \
+    "options" \
+    "${HOME}/.config/$( \
+    _get \
+      "app" \
+      "name")/${_name}_options"
+  [ \
+    -e \
+      "$( \
+        _get \
+	  "${_name}" \
+	  "options" ] && \
+    source \
+      "$( \
+        _get \
+	  "${_name}" \
+	  "options")" || \
+    _msg_info \
+      "no config for ${_name}"
+}
+
 _run() {
   local \
     _name="${1}" \
