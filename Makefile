@@ -28,7 +28,7 @@ install-libcrash-bash:
 	install -vdm 755 "$(LIB_DIR)"
 	install -vDm 755 crash-bash/crash-bash "$(LIB_DIR)"
 
-install-libcrash-bash:
+install-examples:
 
 	install -vdm 755 "$(DATA_DIR)/examples"
 	install -vDm 755 examples/ahno "$(DATA_DIR)/examples"
