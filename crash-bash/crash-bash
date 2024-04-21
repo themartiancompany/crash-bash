@@ -447,6 +447,12 @@ _run() {
   )
   _pid="$( \
     mktemp)"
+  _msg_info \
+    "run '${_name}'"
+  _msg_info \
+    "run '${_cmd[*]}'"
+  _msg_info \
+    "'${_name}' pid file: ${_pid} "
   _set \
     "${_name}" \
     "pid" \
@@ -455,6 +461,11 @@ _run() {
     echo \
       "$!" > \
       "${_pid}"
+  _msg_info \
+    "'${_name}' running with pid $( \
+      cat \
+        "${_pid}")"
+
   wait \
     "${_pid}"
 }
