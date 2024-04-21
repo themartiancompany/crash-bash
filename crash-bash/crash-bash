@@ -435,4 +435,28 @@ _config_user_init() {
   fi
 }
 
+_run() {
+  local \
+    _name="${1}"
+    _cmd=() \
+    _pid
+  shift \
+    1
+  _cmd=(
+    "$@"
+  )
+  _pid="$( \
+    mktemp)"
+  _set \
+    "${_name}" \
+    "pid" \
+    "${_pid}"
+  "${_cmd[@]}" & \
+    echo \
+      "$!" > \
+      "${_pid}"
+  wait \
+    "${_pid}"
+}
+
 # vim:set sw=2 sts=-1 et:
