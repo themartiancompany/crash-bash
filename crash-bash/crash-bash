@@ -437,11 +437,12 @@ _config_user_init() {
 
 _run() {
   local \
-    _name="${1}"
+    _name="${1}" \
+    _timeout="${2}" \
     _cmd=() \
     _pid
   shift \
-    1
+    2
   _cmd=(
     "$@"
   )
@@ -449,8 +450,11 @@ _run() {
     mktemp)"
   _msg_info \
     "run '${_name}'"
+  [[ "${_timeout}" != 0  ]] && \
+    _msg_info \
+      "'${_name}' timeout: ${_timeout}s"
   _msg_info \
-    "run '${_cmd[*]}'"
+    "${_cmd[*]}"
   _msg_info \
     "'${_name}' pid file: ${_pid} "
   _set \
