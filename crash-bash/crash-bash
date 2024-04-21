@@ -424,12 +424,19 @@ _config_user_init() {
     chmod \
       700 \
       "${_cfg_dir}"
-    [ -d "${_share}/${_app}/configs" ] && \
+    [ \
+      -d \
+        "${_share}/$( \
+          _get \
+            "app" \
+            "name")/configs" ] && \
       _msg_info \
         "copying system config files..."
       cp \
         -r \
-        "${_share}/${_app}/configs/"* \
+        "${_share}/$( \
+          "app" \
+          "name")/configs/"* \
         "${_cfg_dir}/" || \
     true
   fi
