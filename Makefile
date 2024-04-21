@@ -31,6 +31,6 @@ install-libcrash-bash:
 install-libcrash-bash:
 
 	install -vdm 755 "$(DATA_DIR)/examples"
-	install -vDm 755 examples/ohno "$(DATA_DIR)/examples"
+	install -vDm 755 examples/ahno "$(DATA_DIR)/examples"
 
 .PHONY: check install install-doc install-examples install-libcrash-bash shellcheck
