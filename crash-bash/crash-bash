@@ -467,6 +467,22 @@ _options_load() {
       "no config for ${_name}"
 }
 
+_read_setting() {
+  local \
+    _cfg="${1}" \
+    _key="${2}"
+  _line="$( \
+    cat \
+      "${_cfg}" | \
+      grep \
+        "${_key}")"
+  echo \
+    "${_line}" | \
+    awk \
+      -F "=" \
+      '{print $2}'
+}
+
 _run() {
   local \
     _name="${1}" \
