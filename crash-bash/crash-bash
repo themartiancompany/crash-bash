@@ -483,6 +483,20 @@ _read_setting() {
       '{print $2}'
 }
 
+_write_setting() {
+  local \
+    _cfg="${1}" \
+    _key="${2}" \
+    _value="${3}"
+  sed \
+    -i \
+    "/${_key}=/d" \
+    "${_cfg}"
+  echo \
+    "${_key}=${_value}" >> \
+    "${_cfg}"
+}
+
 _run() {
   local \
     _name="${1}" \
