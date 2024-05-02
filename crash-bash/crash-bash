@@ -536,4 +536,16 @@ _run() {
     "${_pid}"
 }
 
+_gettmp() {
+  local \
+    _tmp_obj
+  _tmp_obj="$( \
+    mktemp)"
+  dirname \
+    "${_tmp_obj}"
+  rm \
+    -r \
+    "${_tmp_obj}"
+}
+
 # vim:set sw=2 sts=-1 et:
