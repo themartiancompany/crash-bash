@@ -501,22 +501,24 @@ _run() {
   local \
     _name="${1}" \
     _timeout="${2}" \
+    _mode="${3}" \
     _cmd=() \
     _pid
   shift \
-    2
+    3
   _cmd=(
     "$@"
   )
   _pid="$( \
     mktemp)"
   _msg_info \
-    "run '${_name}'"
+    "running '${_name}'"
+  [[ "${_timeout}" == ""  ]] || \
   [[ "${_timeout}" != 0  ]] && \
     _msg_info \
       "'${_name}' timeout: ${_timeout}s"
   _msg_info \
-    "${_cmd[*]}"
+    "'${_name}' command: '${_cmd[*]}'"
   _msg_info \
     "'${_name}' pid file: ${_pid} "
   _set \
@@ -531,9 +533,21 @@ _run() {
     "'${_name}' running with pid $( \
       cat \
         "${_pid}")"
-
-  wait \
-    "${_pid}"
+  [[ "${_timeout}" == ""  ]] || \
+  [[ "${_timeout}" != 0  ]] && \
+    (sleep \
+       "${_timeout}" && \
+     kill \
+       -SIGINT \
+       "$( \
+         cat \
+           "${_pid}")")
+  if [[ "${_mode}" == "sync" ]]; then
+    wait \
+      "$( \
+        cat \
+          "${_pid}")"
+  fi
 }
 
 _gettmp() {
@@ -546,6 +560,15 @@ _gettmp() {
   rm \
     -r \
     "${_tmp_obj}"
+}
+
+_require_root() {
+(( EUID != 0 )) && \
+  _msg_error \
+    "$(_get \
+         "app" \
+         "name") must be run as root." \
+    1
 }
 
 # vim:set sw=2 sts=-1 et:
