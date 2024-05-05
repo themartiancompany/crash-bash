@@ -532,8 +532,8 @@ _run() {
       "${_pid}"
   _msg_info \
     "'${_name}' running with pid $( \
-      cat \
-        "${_pid}")"
+      _get_pid \
+        "${_name}")"
   [[ "${_timeout}" == ""  ]] || \
   [[ "${_timeout}" != 0  ]] && \
     (sleep \
@@ -541,17 +541,27 @@ _run() {
      kill \
        -SIGINT \
        "$( \
-         cat \
-           "${_pid}")")
+         _get_pid \
+           "${_name}")")
   if [[ "${_mode}" == "sync" ]]; then
     wait \
       "$( \
-        cat \
-          "${_pid}")"
+        _get_pid \
+          "${_name}")"
   fi
 }
 
-_gettmp() {
+_get_pid() {
+  local \
+    _name="${1}"
+  cat \
+    "$( \
+      _get \
+        "${_name}" \
+        "pid")"
+}
+
+_get_tmp() {
   local \
     _tmp_obj
   _tmp_obj="$( \
