@@ -484,6 +484,21 @@ _read_setting() {
       '{print $2}'
 }
 
+_input() {
+  local \
+    _var="${1}" \
+    _msg="${2}"
+  printf \
+    "  %s:\n" \
+    "${_msg}" && \
+  while \
+    [[ ! -v "${_var}" ]]; do
+    read \
+      -r \
+      "${_var}"
+  done
+}
+
 _write_setting() {
   local \
     _cfg="${1}" \
