@@ -476,7 +476,7 @@ _read_setting() {
     cat \
       "${_cfg}" | \
       grep \
-        "${_key}")"
+        "^${_key}=")"
   echo \
     "${_line}" | \
     awk \
