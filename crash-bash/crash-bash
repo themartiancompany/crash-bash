@@ -476,6 +476,7 @@ _read_setting() {
     cat \
       "${_cfg}" | \
       grep \
+        -e \
         "^${_key}=")"
   echo \
     "${_line}" | \
