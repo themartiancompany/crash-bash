@@ -431,7 +431,7 @@ _config_user_init() {
             "app" \
             "name")/configs" ] && \
       _msg_info \
-        "copying system config files..."
+        "copying system config files..." && \
       cp \
         -r \
         "${_share}/$( \
