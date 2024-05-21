@@ -76,7 +76,6 @@ _get_cache() {
 }
 
 
-}
 # Show an INFO message
 # $1: message string
 _msg_info() {
