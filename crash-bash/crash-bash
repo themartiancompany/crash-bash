@@ -70,6 +70,13 @@ _get_usr() {
     "$(_get_bin)"
 }
 
+_get_cache() {
+  local \
+    _app="${1}"
+  echo \
+    "${HOME}/.cache/${_app}"
+}
+
 # Show an INFO message
 # $1: message string
 _msg_info() {
@@ -426,18 +433,12 @@ _config_user_init() {
       "${_cfg_dir}"
     [ \
       -d \
-        "${_share}/$( \
-          _get \
-            "app" \
-            "name")/configs" ] && \
+        "${_share}/${_app}/configs" ] && \
       _msg_info \
-        "copying system config files..."
+        "copying system config files..." && \
       cp \
         -r \
-        "${_share}/$( \
-          _get
-            "app" \
-            "name")/configs/"* \
+        "${_share}/${_app}/configs/"* \
         "${_cfg_dir}/" || \
     true
   fi
@@ -476,12 +477,28 @@ _read_setting() {
     cat \
       "${_cfg}" | \
       grep \
-        "${_key}")"
+        -e \
+        "^${_key}=")"
   echo \
     "${_line}" | \
     awk \
       -F "=" \
       '{print $2}'
+}
+
+_input() {
+  local \
+    _var="${1}" \
+    _msg="${2}"
+  printf \
+    "  %s:\n" \
+    "${_msg}" && \
+  while \
+    [[ ! -v "${_var}" ]]; do
+    read \
+      -r \
+      "${_var}"
+  done
 }
 
 _write_setting() {
@@ -532,8 +549,8 @@ _run() {
       "${_pid}"
   _msg_info \
     "'${_name}' running with pid $( \
-      cat \
-        "${_pid}")"
+      _get_pid \
+        "${_name}")"
   [[ "${_timeout}" == ""  ]] || \
   [[ "${_timeout}" != 0  ]] && \
     (sleep \
@@ -541,17 +558,27 @@ _run() {
      kill \
        -INT \
        "$( \
-         cat \
-           "${_pid}")")
+         _get_pid \
+           "${_name}")")
   if [[ "${_mode}" == "sync" ]]; then
     wait \
       "$( \
-        cat \
-          "${_pid}")"
+        _get_pid \
+          "${_name}")"
   fi
 }
 
-_gettmp() {
+_get_pid() {
+  local \
+    _name="${1}"
+  cat \
+    "$( \
+      _get \
+        "${_name}" \
+        "pid")"
+}
+
+_get_tmp() {
   local \
     _tmp_obj
   _tmp_obj="$( \
