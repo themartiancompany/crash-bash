@@ -71,10 +71,11 @@ _get_usr() {
 }
 
 _get_cache() {
+  local \
+    _app="${1}"
   echo \
     "${HOME}/.cache/${_app}"
 }
-
 
 # Show an INFO message
 # $1: message string
