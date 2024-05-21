@@ -17,13 +17,13 @@ check: shellcheck
 shellcheck:
 	shellcheck -s bash $(SCRIPT_FILES) $(EXAMPLES_FILES)
 
-install: install-libcrash-bash install-doc install-examples
+install: install-crash-bash install-doc install-examples
 
 install-doc:
 
 	install -vDm 644 $(DOC_FILES) -t $(DOC_DIR)
 
-install-libcrash-bash:
+install-crash-bash:
 
 	install -vdm 755 "$(LIB_DIR)"
 	install -vDm 755 crash-bash/crash-bash "$(LIB_DIR)"
@@ -33,4 +33,4 @@ install-examples:
 	install -vdm 755 "$(DATA_DIR)/examples"
 	install -vDm 755 examples/ahno "$(DATA_DIR)/examples"
 
-.PHONY: check install install-doc install-examples install-libcrash-bash shellcheck
+.PHONY: check install install-doc install-examples install-crash-bash shellcheck

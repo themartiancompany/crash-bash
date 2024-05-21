@@ -539,7 +539,7 @@ _run() {
     (sleep \
        "${_timeout}" && \
      kill \
-       -SIGINT \
+       -INT \
        "$( \
          cat \
            "${_pid}")")
