@@ -484,6 +484,42 @@ _options_load() {
       "no config for ${_name}"
 }
 
+_comments_remove_get_assign() {
+  local \
+    _text="${1}"
+  echo \
+    "${_text}" | \
+    sed \
+      -e "/# */d" | \
+      grep \
+        "="
+}
+
+_is_conf_empty() {
+  local \
+    _conf="${1}" \
+    _cfg
+  _cfg="$( \
+    _comments_remove_get_assign \
+      "$( \
+        cat \
+          "${_conf}")")"
+  if [[ "${_cfg}" == '' ]]; then
+    _msg_error \
+      "empty configuration file!" \
+      1
+  fi
+}
+
+_check_conf() {
+  local \
+    _conf="${1}"
+  _check_conf_permissions \
+    "${_conf}"
+  _is_conf_empty \
+    "${_conf}"
+}
+
 _read_setting() {
   local \
     _cfg="${1}" \
