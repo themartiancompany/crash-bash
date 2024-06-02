@@ -414,6 +414,21 @@ _sho() {
     "${_text}"
 }
 
+_check_conf_permissions() {
+  local \
+    _conf="${1}" \
+    _perm
+  _perm="$( \
+    stat \
+      -c '%a' \
+      "${_conf}")"
+  if [[ "${_perm}" != "600" ]]; then
+    chmod \
+      600 \
+      "${_conf}"
+  fi
+}
+
 _config_user_init() {
   local \
     _app="${1}" \
