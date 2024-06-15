@@ -579,12 +579,14 @@ _run() {
     _timeout="${2}" \
     _mode="${3}" \
     _cmd=() \
-    _pid
+    _pid \
+    _timeout_delay
   shift \
     3
   _cmd=(
     "$@"
   )
+  _timeout_delay=3
   _pid="$( \
     mktemp)"
   _msg_info \
@@ -612,12 +614,16 @@ _run() {
   [[ "${_timeout}" == ""  ]] || \
   [[ "${_timeout}" != 0  ]] && \
     (sleep \
-       "${_timeout}" && \
+       "$(( \
+         _timeout + \
+         _timeout_delay))" && \
      kill \
        -INT \
        "$( \
          _get_pid \
-           "${_name}")")
+           "${_name}")") || \
+     _msg_info \
+       "process with $(_get_pid "${_name}") probably already killed"
   if [[ "${_mode}" == "sync" ]]; then
     wait \
       "$( \
