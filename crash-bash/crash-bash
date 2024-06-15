@@ -65,6 +65,13 @@ _get_bin() {
          "env")"
 }
 
+_get_date_human() {
+  TZ=UTC \
+    printf \
+      '%(%FT%R%z)T' \
+      "${SOURCE_DATE_EPOCH}"
+}
+
 _get_usr() {
   dirname \
     "$(_get_bin)"
