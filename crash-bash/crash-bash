@@ -58,6 +58,20 @@ _globals() {
   app_name="${0##*/}"
 }
 
+_get_ext() {
+  local \
+    _file="${1}"
+  echo \
+    "${_file##*.}"
+}
+
+_rm_ext() {
+  local \
+    _file="${1}"
+  echo \
+    "${_file%.*}"
+}
+
 _get_bin() {
   dirname \
     "$(command \
