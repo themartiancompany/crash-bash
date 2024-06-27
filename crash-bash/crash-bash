@@ -260,7 +260,7 @@ _check_cmd(){
       "%s" \
       "${_cmd}" | \
       sed \
-        "s/-/_/g")"
+        "s/[-,.]/_/g")"
   command \
      -v \
      "${_cmd}" &> /dev/null && \
@@ -636,14 +636,16 @@ _run() {
        "$( \
          _get_pid \
            "${_name}")") || \
-     _msg_info \
-       "process with $(_get_pid "${_name}") probably already killed"
+     ( _msg_info \
+         "process with $(_get_pid "${_name}") probably already killed" && \
+       true )
   if [[ "${_mode}" == "sync" ]]; then
     wait \
       "$( \
         _get_pid \
           "${_name}")"
   fi
+  true
 }
 
 _get_pid() {
