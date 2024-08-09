@@ -579,10 +579,12 @@ _write_setting() {
     _cfg="${1}" \
     _key="${2}" \
     _value="${3}"
-  sed \
-    -i \
-    "/${_key}=/d" \
-    "${_cfg}"
+  if [  -e "${_cfg}" ]; then
+    sed \
+      -i \
+      "/${_key}=/d" \
+      "${_cfg}"
+  fi
   echo \
     "${_key}=${_value}" >> \
     "${_cfg}"
