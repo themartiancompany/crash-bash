@@ -80,6 +80,12 @@ _get_bin() {
          "env")"
 }
 
+_get_lib() {
+  echo \
+    "$(_get_usr)/lib"
+}
+
+
 _get_date_human() {
   TZ=UTC \
     printf \
