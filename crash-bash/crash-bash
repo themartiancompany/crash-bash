@@ -114,7 +114,7 @@ _msg_info() {
     ) \
     _fmt_line=() \
     _line
-  [[ "${quiet}" == "y" ]] || \
+  [[ "${quiet}" == "n" ]] && \
     for _line \
       in "${_msg[@]}"; do
       _printf \
