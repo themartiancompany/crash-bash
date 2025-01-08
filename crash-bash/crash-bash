@@ -42,6 +42,7 @@ _globals() {
     export \
       _OLDPWD && \
     cd \
+      --  \
       "$( \
 	dirname \
           "${BASH_SOURCE[0]}")" && \
@@ -395,6 +396,35 @@ _usage() {
     "${_exit_code}"
 }
 
+# Colorized Display function
+_sho() {
+  local \
+    _text="${1}" \
+    _pygmentize
+  _pygmentize="$( \
+    command \
+      -v \
+      "pygmentize"{,2} | \
+      head \
+        -n \
+	1)"
+  shift
+  _pygmentize_opts=(
+    "$@"
+  )
+  if [[ "${color}" == "y" ]] && \
+     [[ "${_pygmentize}" != "" ]]; then
+    echo \
+      "${_text}" | 
+      "${_pygmentize}" \
+        "${_pygmentize_opts[@]}"
+    return
+  fi
+  printf \
+    "%s\n" \
+    "${_text}"
+}
+
 # Colorized print
 _printf() {
   local \
@@ -413,34 +443,6 @@ _printf() {
       printf \
         "${_args[@]}")" \
     "${_pygmentize_opts[@]}"
-}
-
-# Colorized Display function
-_sho() {
-  local \
-    _text="${1}" \
-    _pygmentize
-  _pygmentize="$( \
-    command \
-      -v \
-      "pygmentize"{,2} | \
-      head \
-        -n \
-	1)"
-  shift
-  _pygmentize_opts=(
-    "$@"
-  )
-  [[ "${color}" == "y" ]] && \
-  [[ "${_pygmentize}" != "" ]] && \
-    echo \
-      "${_text}" | 
-      "${_pygmentize}" \
-        "${_pygmentize_opts[@]}" && \
-    return
-  printf \
-    "%s\n" \
-    "${_text}"
 }
 
 _check_conf_permissions() {
@@ -475,16 +477,14 @@ _config_user_init() {
     chmod \
       700 \
       "${_cfg_dir}"
-    [ \
-      -d \
-        "${_share}/${_app}/configs" ] && \
+    if [ -d "${_share}/${_app}/configs" ]; then
       _msg_info \
-        "copying system config files..." && \
+        "copying system config files..."
       cp \
         -r \
         "${_share}/${_app}/configs/"* \
-        "${_cfg_dir}/" || \
-    true
+        "${_cfg_dir}/"
+    fi
   fi
 }
 
@@ -498,19 +498,18 @@ _options_load() {
       _get \
         "app" \
         "name")/${_name}_options"
-  [ \
-    -e \
-      "$( \
-        _get \
-	  "${_name}" \
-          "options")" ] && \
+  if [[ -e "$(_get \
+	       "${_name}" \
+               "options")" ]]; then
     source \
       "$( \
         _get \
 	  "${_name}" \
-	  "options")" || \
+	  "options")"
+  else
     _msg_info \
       "no config for ${_name}"
+  fi
 }
 
 _comments_remove_get_assign() {
@@ -615,10 +614,11 @@ _run() {
     mktemp)"
   _msg_info \
     "running '${_name}'"
-  [[ "${_timeout}" == ""  ]] || \
-  [[ "${_timeout}" != 0  ]] && \
+  if [[ "${_timeout}" == ""  ]] || \
+     [[ "${_timeout}" != 0  ]]; then
     _msg_info \
       "'${_name}' timeout: ${_timeout}s"
+  fi
   _msg_info \
     "'${_name}' command: '${_cmd[*]}'"
   _msg_info \
@@ -635,8 +635,8 @@ _run() {
     "'${_name}' running with pid $( \
       _get_pid \
         "${_name}")"
-  [[ "${_timeout}" == ""  ]] || \
-  [[ "${_timeout}" != 0  ]] && \
+  if [[ "${_timeout}" == ""  ]] || \
+     [[ "${_timeout}" != 0  ]]; then
     (sleep \
        "$(( \
          _timeout + \
@@ -649,6 +649,7 @@ _run() {
      ( _msg_info \
          "process with $(_get_pid "${_name}") probably already killed" && \
        true )
+  fi
   if [[ "${_mode}" == "sync" ]]; then
     wait \
       "$( \
@@ -681,12 +682,13 @@ _get_tmp() {
 }
 
 _require_root() {
-(( EUID != 0 )) && \
-  _msg_error \
-    "$(_get \
-         "app" \
-         "name") must be run as root." \
-    1
+  if (( EUID != 0 )); then
+    _msg_error \
+      "$(_get \
+           "app" \
+           "name") must be run as root." \
+      1
+  fi
 }
 
 # vim:set sw=2 sts=-1 et:
