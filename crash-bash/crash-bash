@@ -614,7 +614,7 @@ _run() {
     mktemp)"
   _msg_info \
     "running '${_name}'"
-  if [[ "${_timeout}" == ""  ]] || \
+  if [[ "${_timeout}" != ""  ]] && \
      [[ "${_timeout}" != 0  ]]; then
     _msg_info \
       "'${_name}' timeout: ${_timeout}s"
@@ -635,7 +635,7 @@ _run() {
     "'${_name}' running with pid $( \
       _get_pid \
         "${_name}")"
-  if [[ "${_timeout}" == ""  ]] || \
+  if [[ "${_timeout}" != "" ]] && \
      [[ "${_timeout}" != 0  ]]; then
     (sleep \
        "$(( \
@@ -656,7 +656,7 @@ _run() {
         _get_pid \
           "${_name}")"
   fi
-  true
+  return
 }
 
 _get_pid() {
