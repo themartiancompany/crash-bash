@@ -596,6 +596,38 @@ _write_setting() {
     "${_cfg}"
 }
 
+kill_timeout() {
+  local \
+    _name="${1}" \
+    _timeout="${2}" \
+    _delay="${3}" \
+    _pid \
+    _msg=()
+  _pid="$( \
+    _get_pid \
+      "${_pid}")"
+  sleep \
+     "$(( \
+       _timeout + \
+       _delay))"
+  if ps \
+       -p \
+       "${_pid}" > \
+       /dev/null; then
+     kill \
+       -INT \
+       "${_pid}" || \
+       true
+  else
+    _msg=(
+      "process with pid '${_pid}'"
+      "already killed"
+    )
+    _msg_info \
+      "${_msg[*]}"
+  fi
+}
+
 _run() {
   local \
     _name="${1}" \
@@ -603,7 +635,8 @@ _run() {
     _mode="${3}" \
     _cmd=() \
     _pid \
-    _timeout_delay
+    _timeout_delay \
+    _msg=()
   shift \
     3
   _cmd=(
@@ -616,8 +649,12 @@ _run() {
     "running '${_name}'"
   if [[ "${_timeout}" != ""  ]] && \
      [[ "${_timeout}" != 0  ]]; then
-    _msg_info \
+    _msg=(
       "'${_name}' timeout: ${_timeout}s"
+      "(and ${_timeout_delay}s of delay)"
+    )
+    _msg_info \
+      "${_msg[*]}"
   fi
   _msg_info \
     "'${_name}' command: '${_cmd[*]}'"
@@ -637,18 +674,10 @@ _run() {
         "${_name}")"
   if [[ "${_timeout}" != "" ]] && \
      [[ "${_timeout}" != 0  ]]; then
-    (sleep \
-       "$(( \
-         _timeout + \
-         _timeout_delay))" && \
-     kill \
-       -INT \
-       "$( \
-         _get_pid \
-           "${_name}")") || \
-     ( _msg_info \
-         "process with $(_get_pid "${_name}") probably already killed" && \
-       true )
+    _kill_timeout \
+      "${_name}" \
+      "${_timeout}" \
+      "${_timeout_delay}" &
   fi
   if [[ "${_mode}" == "sync" ]]; then
     wait \
