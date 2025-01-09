@@ -691,4 +691,21 @@ _require_root() {
   fi
 }
 
+_sourced() {
+  local \
+    _file="${1}" \
+    _source \
+    _path
+  _path="$( \
+    realpath \
+      "${_file}")"
+  for _source in "${BASH_SOURCE[@]}"; do
+    if [[ "${_path}" == "${_source}" ]]; then
+      return
+    fi
+  done
+  source \
+    "${_file}"
+}
+
 # vim:set sw=2 sts=-1 et:
