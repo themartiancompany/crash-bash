@@ -400,37 +400,37 @@ _usage() {
 _sho() {
   local \
     _text="${1}" \
-    _pygmentize_opts=() \
     _pygmentize
+  _pygmentize="$( \
+    command \
+      -v \
+      "pygmentize"{,2} | \
+      head \
+        -n \
+	1)"
   shift
+  _pygmentize_opts=(
+    "$@"
+  )
   if [[ "${color}" == "y" ]] && \
      [[ "${_pygmentize}" != "" ]]; then
-    _pygmentize="$( \
-      command \
-        -v \
-        "pygmentize"{,2} | \
-        head \
-          -n \
-            1)"
-    _pygmentize_opts+=(
-      "$@"
-    )
     echo \
       "${_text}" | 
       "${_pygmentize}" \
         "${_pygmentize_opts[@]}"
     return
   fi
-  echo \
+  printf \
+    "%s\n" \
     "${_text}"
 }
 
 # Colorized print
 _printf() {
   local \
-    _args=() \
+    _args=()
     _pygmentize_opts=()
-  _pygmentize_opts+=(
+  _pygmentize_opts=(
     -g
     -O style=emacs
   )
@@ -439,7 +439,9 @@ _printf() {
   )
   # shellcheck disable=SC2059
   _sho \
-    "${_args[*]}" \
+    "$( \
+      printf \
+        "${_args[@]}")" \
     "${_pygmentize_opts[@]}"
 }
 
