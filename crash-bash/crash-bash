@@ -756,4 +756,25 @@ _sourced() {
     "${_file}"
 }
 
+_lower() {
+  local \
+    _string="${1}"
+  echo \
+    "${_string}" | \
+    tr \
+      '[:upper:]' \
+      '[:lower:]'
+}
+
+_upper() {
+  local \
+    _string="${1}"
+  echo \
+    "${_string}" | \
+    tr \
+      '[:lower:]' \
+      '[:upper:]'
+}
+
+
 # vim:set sw=2 sts=-1 et:
