@@ -34,6 +34,7 @@ A censorable HTTP Github mirror of the recipe published there
 is hosted on
 [libcrash-bash-ur](
   https://github.com/themartiancompany/libcrash-bash-ur).
+Be aware it could go offline any time.
 
 ## License
 
