@@ -30,7 +30,7 @@ ur \
   libcrash-bash
 ```
 
-An HTTP Github mirror of the recipe published there
+A censorable HTTP Github mirror of the recipe published there
 is hosted on
 [libcrash-bash-ur](
   https://github.com/themartiancompany/libcrash-bash-ur).
