@@ -776,5 +776,10 @@ _upper() {
       '[:upper:]'
 }
 
+_dequote() {
+  _string="${1}"
+  echo \
+    "${_string:1:-1}"
+}
 
 # vim:set sw=2 sts=-1 et:
