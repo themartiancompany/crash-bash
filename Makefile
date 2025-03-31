@@ -35,7 +35,7 @@ DOC_FILES=\
 
 _INSTALL_FILE=install -vDm644
 _INSTALL_EXE=install -vDm755
-_INSTALL_DIR=install vdm755
+_INSTALL_DIR=install -vdm755
 
 _CHECK_TARGETS=\
   shellcheck
@@ -90,6 +90,5 @@ install-man:
 	rst2man \
 	  "man/$(_PROJECT).1.rst" \
 	  "$(MAN_DIR)/man1/lib$(_PROJECT).1"
-
 
 .PHONY: $(_CHECK_TARGETS_ALL) $(_INSTALL_TARGETS_ALL)
