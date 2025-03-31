@@ -312,7 +312,7 @@ _check_cmd(){
       _cmd="${_pkgs[*]}"
     fi
     _msg_error \
-      "Install ${_cmd}" \
+      "Install '${_cmd}'." \
       1
   fi
 }
@@ -368,7 +368,7 @@ _override_path() {
       true)"
   [[ "${_path}" == "" ]] && \
     _msg_error \
-      "${_value} is not a valid path." \
+      "'${_value}' is not a valid path." \
       1
   _set_override \
     "${_obj}" \
@@ -488,7 +488,7 @@ _config_user_init() {
   _cfg_dir="${HOME}/.config/${_app}"
   if [ ! -d "${_cfg_dir}" ]; then
     _msg_info \
-      "creating: ${_cfg_dir}"
+      "Creating '${_cfg_dir}'."
     mkdir \
       -p \
       "${_cfg_dir}"
@@ -497,7 +497,7 @@ _config_user_init() {
       "${_cfg_dir}"
     if [ -d "${_share}/${_app}/configs" ]; then
       _msg_info \
-        "copying system config files..."
+        "Copying system config files..."
       cp \
         -r \
         "${_share}/${_app}/configs/"* \
@@ -526,7 +526,7 @@ _options_load() {
 	  "options")"
   else
     _msg_info \
-      "no config for ${_name}"
+      "No config for '${_name}'."
   fi
 }
 
@@ -552,7 +552,7 @@ _is_conf_empty() {
           "${_conf}")")"
   if [[ "${_cfg}" == '' ]]; then
     _msg_error \
-      "empty configuration file!" \
+      "Empty configuration file." \
       1
   fi
 }
@@ -638,8 +638,8 @@ kill_timeout() {
        true
   else
     _msg=(
-      "process with pid '${_pid}'"
-      "already killed"
+      "Process with pid '${_pid}'"
+      "already killed."
     )
     _msg_info \
       "${_msg[*]}"
@@ -664,20 +664,20 @@ _run() {
   _pid="$( \
     mktemp)"
   _msg_info \
-    "running '${_name}'"
+    "Running '${_name}'."
   if [[ "${_timeout}" != ""  ]] && \
      [[ "${_timeout}" != 0  ]]; then
     _msg=(
-      "'${_name}' timeout: ${_timeout}s"
-      "(and ${_timeout_delay}s of delay)"
+      "Timeout for '${_name}': '${_timeout}',"
+      "delay: '${_timeout_delay}' seconds."
     )
     _msg_info \
       "${_msg[*]}"
   fi
   _msg_info \
-    "'${_name}' command: '${_cmd[*]}'"
+    "Command for '${_name}': '${_cmd[*]}'"
   _msg_info \
-    "'${_name}' pid file: ${_pid} "
+    "Pid file for '${_name}': ${_pid} "
   _set \
     "${_name}" \
     "pid" \
@@ -687,7 +687,7 @@ _run() {
       "$!" > \
       "${_pid}"
   _msg_info \
-    "'${_name}' running with pid $( \
+    "Process '${_name}' running with pid $( \
       _get_pid \
         "${_name}")"
   if [[ "${_timeout}" != "" ]] && \
