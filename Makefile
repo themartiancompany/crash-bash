@@ -20,35 +20,76 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 PREFIX ?= /usr/local
-DOC_DIR=$(DESTDIR)$(PREFIX)/share/doc/libcrash-bash
-DATA_DIR=$(DESTDIR)$(PREFIX)/share/libcrash-bash
-LIB_DIR=$(DESTDIR)$(PREFIX)/lib/libcrash-bash
+_PROJECT=crash-bash
+DOC_DIR=$(DESTDIR)$(PREFIX)/share/doc/lib$(_PROJECT)
+DATA_DIR=$(DESTDIR)$(PREFIX)/share/lib$(_PROJECT)
+LIB_DIR=$(DESTDIR)$(PREFIX)/lib/lib$(_PROJECT)
+MAN_DIR?=$(DESTDIR)$(PREFIX)/share/man
 
-DOC_FILES=$(wildcard *.rst)
-SCRIPT_FILES=$(wildcard crash-bash/*)
+SCRIPT_FILES=$(wildcard $(_PROJECT)/*)
 EXAMPLES_FILES=$(wildcard examples/*)
+
+DOC_FILES=\
+  $(wildcard *.rst) \
+  $(wildcard *.md)
+
+_INSTALL_FILE=install -vDm644
+_INSTALL_EXE=install -vDm755
+_INSTALL_DIR=install vdm755
+
+_CHECK_TARGETS=\
+  shellcheck
+_CHECK_TARGETS_ALL=\
+  check \
+  $(_CHECK_TARGETS)
+_INSTALL_TARGETS=\
+  install-$(_PROJECT) \
+  install-doc \
+  install-examples \
+  install-man
+_INSTALL_TARGETS_ALL=\
+  install \
+  $(_INSTALL_TARGETS)
 
 all:
 
-check: shellcheck
+check: $(_CHECK_TARGETS)
 
 shellcheck:
 	shellcheck -s bash $(SCRIPT_FILES) $(EXAMPLES_FILES)
 
-install: install-crash-bash install-doc install-examples
+install: $(_INSTALL_TARGETS)
 
 install-doc:
 
-	install -vDm 644 $(DOC_FILES) -t $(DOC_DIR)
+	$(_INSTALL_FILE) \
+	  $(DOC_FILES) \
+	  -t \
+	  $(DOC_DIR)
 
 install-crash-bash:
 
-	install -vdm 755 "$(LIB_DIR)"
-	install -vDm 755 crash-bash/crash-bash "$(LIB_DIR)"
+	$(_INSTALL_DIR) \
+	  "$(LIB_DIR)"
+	$(_INSTALL_EXE) \
+	  "$(_PROJECT)/$(_PROJECT)" \
+	  "$(LIB_DIR)"
 
 install-examples:
 
-	install -vdm 755 "$(DATA_DIR)/examples"
-	install -vDm 755 examples/ahno "$(DATA_DIR)/examples"
+	$(_INSTALL_DIR) \
+	  "$(DATA_DIR)/examples"
+	$(_INSTALL_EXE) \
+	  "examples/ahno" \
+	  "$(DATA_DIR)/examples"
 
-.PHONY: check install install-doc install-examples install-crash-bash shellcheck
+install-man:
+
+	$(_INSTALL_DIR) \
+	  "$(MAN_DIR)/man1"
+	rst2man \
+	  "man/$(_PROJECT).1.rst" \
+	  "$(MAN_DIR)/man1/lib$(_PROJECT).1"
+
+
+.PHONY: $(_CHECK_TARGETS_ALL) $(_INSTALL_TARGETS_ALL)
