@@ -271,6 +271,30 @@ _get() {
     "${!_ref}"
 }
 
+_array_set() {
+  local \
+    _array_name="${1}" \
+    _set_name="${2}" \
+    _ref \
+    _item \
+    _ass
+  _ref="${_array_name}[@]"
+  declare \
+    -A \
+    "_ass"
+  declare \
+    -ag \
+    "_set"
+  for _item in "${!_ref}"; do
+    _ass["${_item}"]=1
+  done
+  for _item in "${!_ass[@]}"; do
+    _set+=(
+      "${_item}"
+    )
+  done
+}
+
 _check_cmd(){
   local \
     _cmd="${1}" \
