@@ -26,16 +26,28 @@ DATA_DIR=$(DESTDIR)$(PREFIX)/share/lib$(_PROJECT)
 LIB_DIR=$(DESTDIR)$(PREFIX)/lib/lib$(_PROJECT)
 MAN_DIR?=$(DESTDIR)$(PREFIX)/share/man
 
-SCRIPT_FILES=$(wildcard $(_PROJECT)/*)
-EXAMPLES_FILES=$(wildcard examples/*)
+SCRIPT_FILES=\
+  $(wildcard \
+      $(_PROJECT)/*)
+EXAMPLES_FILES=\
+  $(wildcard \
+      examples/*)
 
 DOC_FILES=\
-  $(wildcard *.rst) \
-  $(wildcard *.md)
+  $(wildcard \
+      *.rst) \
+  $(wildcard \
+      *.md)
 
-_INSTALL_FILE=install -vDm644
-_INSTALL_EXE=install -vDm755
-_INSTALL_DIR=install -vdm755
+_INSTALL_FILE=\
+  install \
+    -vDm644
+_INSTALL_EXE=\
+  install \
+    -vDm755
+_INSTALL_DIR=\
+  install \
+    -vdm755
 
 _CHECK_TARGETS=\
   shellcheck
@@ -56,7 +68,12 @@ all:
 check: $(_CHECK_TARGETS)
 
 shellcheck:
-	shellcheck -s bash $(SCRIPT_FILES) $(EXAMPLES_FILES)
+
+	shellcheck \
+	  -s \
+	    "bash" \
+	  $(SCRIPT_FILES) \
+	  $(EXAMPLES_FILES)
 
 install: $(_INSTALL_TARGETS)
 
