@@ -52,6 +52,7 @@ Synopsis
     source \
       "${_crash_bash}"
 
+
 Description
 ===========
 
@@ -78,20 +79,25 @@ the EVMFS) and many others currently in development.
 Crash Bash is a core component of the
 Human Instrumentality Project (HIP).
 
+
 Bugs
 ====
 
 https://github.com/themartiancompany/crash-bash/-/issues
+
 
 Copyright
 =========
 
 Copyright Pellegrino Prevete. AGPL-3.0.
 
+
 See also
 ========
 
+* libcrash-gpg
 * libcrash-js
+
 
 External Resources
 ===================
