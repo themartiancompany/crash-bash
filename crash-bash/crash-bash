@@ -55,14 +55,14 @@ _globals() {
   
   # Get script path
   # shellcheck disable=SC2005
-  _path="$( \
-    _OLDPWD="$( \
+  _path="$(
+    _OLDPWD="$(
       pwd)" && \
     export \
       _OLDPWD && \
     cd \
       --  \
-      "$( \
+      "$(
 	dirname \
           "${BASH_SOURCE[0]}")" && \
     echo \
@@ -190,7 +190,7 @@ _set() {
     _ass_type
   _target="${_obj}_${_var}"
   _ass_target="${_obj}[${_var}]"
-  _ass_type="$( \
+  _ass_type="$(
     _get_type \
       "${_obj}")"
   [[ "${_ass_type}" == "dict" ]] && \
@@ -209,7 +209,7 @@ _get_type() {
     _obj="${1}" \
     _type="string" \
     _declare
-  _declare="$( \
+  _declare="$(
     declare \
       -p \
         "${_obj}" 2>&1)"
@@ -247,10 +247,10 @@ _get() {
   _target="${_obj}_${_var}"
   _ref="${_target}[@]"
   _ass_ref="${_obj}[${_var}]"
-  _type="$( \
+  _type="$(
     _get_type \
       "${_target}")"
-  _ass_type="$( \
+  _ass_type="$(
     _get_type \
       "${_ass_target}")"
   [[ "${_type}" == "undefined" ]] && \
@@ -316,7 +316,7 @@ _check_cmd(){
   _pkgs=(
     "$@"
   )
-  _cmd_var="$( \
+  _cmd_var="$(
     printf \
       "%s" \
       "${_cmd}" | \
@@ -329,11 +329,10 @@ _check_cmd(){
       -v \
         "_${_cmd_var}" \
       "%s" \
-      "$( \
-        command \
-          -v \
-          "${_cmd}")" && \
-    _flag=true
+      "$(command \
+           -v \
+           "${_cmd}")" && \
+    _flag="true"
   [ -e "${_path}/${_cmd}" ] && \
     printf \
       -v \
@@ -367,15 +366,13 @@ _set_override() {
     _set \
       "${_obj}" \
       "${_var}" \
-      "$( \
-        _get \
-	  "override_${_obj}" \
-          "${_var}")"
+      "$(_get \
+	   "override_${_obj}" \
+           "${_var}")"
   elif [[ -z \
-	    "$( \
-	      _get \
-	        "${_obj}" \
-                "${_var}")" ]]; then
+	    "$(_get \
+	         "${_obj}" \
+                 "${_var}")" ]]; then
     _set \
       "${_obj}" \
       "${_var}" \
@@ -395,7 +392,7 @@ _override_path() {
     _var="${2}" \
     _value="${3}" \
     _path
-  _path="$( \
+  _path="$(
     realpath \
       -q -- \
       "${_value}" || \
@@ -411,12 +408,10 @@ _override_path() {
   _set \
     "${_obj}" \
     "${_var}" \
-    "$( \
-      realpath -- \
-        "$( \
-	  _get \
-	    "${_obj}" \
-            "${_var}")")"
+    "$(realpath -- \
+         "$(_get \
+              "${_obj}" \
+              "${_var}")")"
 }
 
 
@@ -453,7 +448,7 @@ _sho() {
   local \
     _text="${1}" \
     _pygmentize
-  _pygmentize="$( \
+  _pygmentize="$(
     command \
       -v \
       "pygmentize"{,2} | \
@@ -491,9 +486,8 @@ _printf() {
   )
   # shellcheck disable=SC2059
   _sho \
-    "$( \
-      printf \
-        "${_args[@]}")" \
+    "$(printf \
+         "${_args[@]}")" \
     "${_pygmentize_opts[@]}"
 }
 
@@ -501,7 +495,7 @@ _check_conf_permissions() {
   local \
     _conf="${1}" \
     _perm
-  _perm="$( \
+  _perm="$(
     stat \
       -c '%a' \
       "${_conf}")"
@@ -517,7 +511,7 @@ _config_user_init() {
     _app="${1}" \
     _cfg_dir \
     _share
-  _share="$( \
+  _share="$(
     _get_usr)/share"
   _cfg_dir="${HOME}/.config/${_app}"
   if [ ! -d "${_cfg_dir}" ]; then
@@ -546,7 +540,7 @@ _options_load() {
   _set \
     "${_name}" \
     "options" \
-    "${HOME}/.config/$( \
+    "${HOME}/.config/$(
       _get \
         "app" \
         "name")/${_name}_options"
@@ -554,7 +548,7 @@ _options_load() {
 	       "${_name}" \
                "options")" ]]; then
     source \
-      "$( \
+      "$(
         _get \
 	  "${_name}" \
 	  "options")"
@@ -579,11 +573,10 @@ _is_conf_empty() {
   local \
     _conf="${1}" \
     _cfg
-  _cfg="$( \
+  _cfg="$(
     _comments_remove_get_assign \
-      "$( \
-        cat \
-          "${_conf}")")"
+      "$(cat \
+           "${_conf}")")"
   if [[ "${_cfg}" == '' ]]; then
     _msg_error \
       "Empty configuration file." \
@@ -604,7 +597,7 @@ _read_setting() {
   local \
     _cfg="${1}" \
     _key="${2}"
-  _line="$( \
+  _line="$(
     cat \
       "${_cfg}" | \
       grep \
@@ -655,7 +648,7 @@ kill_timeout() {
     _delay="${3}" \
     _pid \
     _msg=()
-  _pid="$( \
+  _pid="$(
     _get_pid \
       "${_name}")"
   sleep \
@@ -695,7 +688,7 @@ _run() {
     "$@"
   )
   _timeout_delay=3
-  _pid="$( \
+  _pid="$(
     mktemp)"
   _msg_info \
     "Running '${_name}'."
@@ -721,7 +714,7 @@ _run() {
       "$!" > \
       "${_pid}"
   _msg_info \
-    "Process '${_name}' running with pid $( \
+    "Process '${_name}' running with pid $(
       _get_pid \
         "${_name}")"
   if [[ "${_timeout}" != "" ]] && \
@@ -733,9 +726,8 @@ _run() {
   fi
   if [[ "${_mode}" == "sync" ]]; then
     wait \
-      "$( \
-        _get_pid \
-          "${_name}")"
+      "$(_get_pid \
+           "${_name}")"
   fi
   return
 }
@@ -744,16 +736,15 @@ _get_pid() {
   local \
     _name="${1}"
   cat \
-    "$( \
-      _get \
-        "${_name}" \
-        "pid")"
+    "$(_get \
+         "${_name}" \
+         "pid")"
 }
 
 _get_tmp() {
   local \
     _tmp_obj
-  _tmp_obj="$( \
+  _tmp_obj="$(
     mktemp)"
   dirname \
     "${_tmp_obj}"
@@ -777,7 +768,7 @@ _sourced() {
     _file="${1}" \
     _source \
     _path
-  _path="$( \
+  _path="$(
     realpath \
       "${_file}")"
   for _source in "${BASH_SOURCE[@]}"; do
