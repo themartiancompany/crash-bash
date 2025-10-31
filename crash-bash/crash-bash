@@ -277,22 +277,23 @@ _array_set() {
     _set_name="${2}" \
     _ref \
     _item \
-    _ass
+    _ass \
+    _set_ref \
+    _counter
+  _counter=0
   _ref="${_array_name}[@]"
+  _set_size_ref="#${_set_name}[@]"
   declare \
     -A \
     "_ass"
-  declare \
-    -ag \
-    "_set"
   for _item in "${!_ref}"; do
     _ass["${_item}"]=1
   done
-  for _item in "${!_ass[@]}"; do
-    _set+=(
-      "${_item}"
-    )
-  done
+  read \
+    -rd \
+      $'\0' \
+    "${_set_name}" <<< \
+    "${!_ass[@]}"
 }
 
 _check_cmd(){
