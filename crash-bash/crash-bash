@@ -279,7 +279,15 @@ _array_set() {
     _item \
     _ass \
     _set_ref \
-    _counter
+    _set_size_ref \
+    _mapfile_opts=()
+  _mapfile_opts+=(
+    -d
+      $'\0'
+  )
+  _printf_opts+=(
+    '%s\0'
+  )
   _counter=0
   _ref="${_array_name}[@]"
   _set_size_ref="#${_set_name}[@]"
@@ -289,11 +297,12 @@ _array_set() {
   for _item in "${!_ref}"; do
     _ass["${_item}"]=1
   done
-  read \
-    -rd \
-      $'\0' \
-    "${_set_name}" <<< \
-    "${!_ass[@]}"
+  mapfile \
+    "${_mapfile_opts[@]}" \
+    "${_set_name}" < <(
+      printf \
+        "${_printf_opts[@]}" \
+        "${!_ass[@]}")
 }
 
 _check_cmd(){
