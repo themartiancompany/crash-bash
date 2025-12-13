@@ -319,7 +319,7 @@ _check_cmd(){
   _cmd_var="$(
     printf \
       "%s" \
-      "${_cmd}" | \
+      "${_cmd}" |
       sed \
         "s/[-,.]/_/g")"
   command \
@@ -451,7 +451,7 @@ _sho() {
   _pygmentize="$(
     command \
       -v \
-      "pygmentize"{,2} | \
+      "pygmentize"{,2} |
       head \
         -n \
 	1)"
@@ -562,9 +562,9 @@ _comments_remove_get_assign() {
   local \
     _text="${1}"
   echo \
-    "${_text}" | \
+    "${_text}" |
     sed \
-      -e "/# */d" | \
+      -e "/# */d" |
       grep \
         "="
 }
@@ -599,12 +599,12 @@ _read_setting() {
     _key="${2}"
   _line="$(
     cat \
-      "${_cfg}" | \
+      "${_cfg}" |
       grep \
         -e \
         "^${_key}=")"
   echo \
-    "${_line}" | \
+    "${_line}" |
     awk \
       -F "=" \
       '{print $2}'
@@ -784,7 +784,7 @@ _lower() {
   local \
     _string="${1}"
   echo \
-    "${_string}" | \
+    "${_string}" |
     tr \
       '[:upper:]' \
       '[:lower:]'
@@ -794,7 +794,7 @@ _upper() {
   local \
     _string="${1}"
   echo \
-    "${_string}" | \
+    "${_string}" |
     tr \
       '[:lower:]' \
       '[:upper:]'
