@@ -285,9 +285,6 @@ _array_set() {
     -d
       $'\0'
   )
-  _printf_opts+=(
-    '%s\0'
-  )
   _counter=0
   _ref="${_array_name}[@]"
   _set_size_ref="#${_set_name}[@]"
@@ -301,7 +298,7 @@ _array_set() {
     "${_mapfile_opts[@]}" \
     "${_set_name}" < <(
       printf \
-        "${_printf_opts[@]}" \
+        '%s\0' \
         "${!_ass[@]}")
 }
 
