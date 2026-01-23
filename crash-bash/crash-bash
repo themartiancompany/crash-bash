@@ -296,7 +296,7 @@ _array_set() {
   done
   mapfile \
     "${_mapfile_opts[@]}" \
-    "${_set_name}" < <(
+    "${_set_name}" < <( \
       printf \
         '%s\0' \
         "${!_ass[@]}")
@@ -638,7 +638,7 @@ _write_setting() {
     "${_cfg}"
 }
 
-kill_timeout() {
+_kill_timeout() {
   local \
     _name="${1}" \
     _timeout="${2}" \
