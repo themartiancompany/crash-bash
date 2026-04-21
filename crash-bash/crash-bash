@@ -61,17 +61,15 @@ _globals() {
   # Get script path
   # shellcheck disable=SC2005
   _path="$(
-    _OLDPWD="$(
-      pwd)" && \
+    _OLDPWD="${PWD}" &&
     export \
       _OLDPWD && \
     cd \
       --  \
-      "$(
-	dirname \
-          "${BASH_SOURCE[0]}")" && \
+      "$(dirname \
+           "${BASH_SOURCE[0]}")" && \
     echo \
-      "$(pwd)" && \
+      "${PWD}" && \
     cd \
       "${_OLDPWD}" && \
     unset \

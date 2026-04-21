@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0
 
 #    ----------------------------------------------------------------------
-#    Copyright © 2024, 2025  Pellegrino Prevete
+#    Copyright © 2024, 2025, 2026  Pellegrino Prevete
 #
 #    All rights reserved
 #    ----------------------------------------------------------------------
@@ -21,12 +21,27 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-_bin="$( \
+
+_bin="$(
   dirname \
-    "$( \
-      command \
-        -v \
-	  "env")")"
+    "$(command \
+         -v \
+         "env")")"
+_lib="$(
+  realpath \
+    "${_bin}/../lib")"
+_crash_bash="${_lib}/libcrash-bash/crash-bash"
+_sourced \
+  "${_crash_bash}" \
+  2>"/dev/null" || \
+source \
+  "${_crash_bash}"
+
+_bin="$(
+  dirname \
+    "$(command \
+         -v \
+	 "env")")"
 _lib="${_bin}/../lib"
 _share="${_bin}/../share"
 source \
@@ -58,15 +73,18 @@ _ahno() {
     _i=(
       "${2}"
     ) \
-    _opts=()
+    _opts=() \
+    _msg=()
+  _msg=( $(
+    printf \
+      "gone %s %s" \
+      "${_c}" \
+      "${_i[*]}")
+  )
   _msg_info \
-    "$( \
-      printf \
-        "gone %s %s" \
-	"${_c}" \
-	"${_i[*]}")"
-  if [[ "${_i[*]}" == "" ]] || \
-     [[ "$(_get \
+    "${_msg[*]}"
+  if [[ "${_i[*]}" == "" || \
+        "$(_get \
              "out" \
 	     "stdout")" == "y" ]]; then
     _out+=(
@@ -78,14 +96,13 @@ _ahno() {
     "li"
   ) 
   _sho \
-    "$( \
-      printf \
-        "running ohno from ${_c} with options: %s" \
+    "$(printf \
+         "running ohno from ${_c} with options: %s" \
       "${_opts[*]}")"
 }
 
 # Set defaults and, if present, overrides
-# from arch-grub command line option parameters
+# from ahno command line option parameters
 _set_overrides() {
   _set_override \
     "un" \
@@ -94,10 +111,9 @@ _set_overrides() {
   _set_override
     "ah" \
     "ok" \
-    "$( \
-      _get \
-        "un" \
-	"tru").0o0o0o0oo0o0o0o0o"
+    "$(_get \
+         "un" \
+	 "tru").0o0o0o0oo0o0o0o0o"
   _set_override
     "ah" \
     "app" \
@@ -135,7 +151,7 @@ adddis
 Usage:
   $(_get "app" "name")
     [options]
-    (<un_tru>)
+    (<un-tru>)
   options:
      -a                   nononon 
      -s                   Output to stdout.
@@ -160,30 +176,37 @@ while \
     arg; do
   case \
     "${arg}" in
-    a) ovveride_ah_app="n" ;;
-    s) override_out_stdout="y" ;;
-    c) override_color="y" ;;
-    v) override_quiet="n" ;;
-    h|?) _set_overrides && \
-	 _usage \
-           0 ;;
+    a)
+      ovveride_ah_app="n" ;;
+    s)
+      override_out_stdout="y" ;;
+    c)
+      override_color="y" ;;
+    v)
+      override_quiet="n" ;;
+    h|?)
+      _set_overrides
+      _usage \
+        0 ;;
     *)
-    _msg_error \
-      "Invalid argument '${arg}'" \
-      0 && \
-    _set_overrides && \
-    _usage \
-      1
-    ;;
+      _msg_error \
+        "Invalid argument '${arg}'" \
+        0
+      _set_overrides
+      _usage \
+        1
+      ;;
   esac
 done
 shift \
-  $(( \
+  $((
     OPTIND - 1 \
   ))
-(( $# < 1 )) && \
+if (( ${#} < 1 )); then
+  _set_overrides
   _usage \
     1
+fi
 (( $# == 1 )) && \
   un_tru="${1}"
 shift \
