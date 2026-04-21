@@ -341,6 +341,7 @@ _array_remove() {
           "${!_ref_item}"
         )
       else
+        true
       fi || \
       true
       _index="$((
