@@ -369,7 +369,6 @@ _array_remove() {
     done
   fi
   for _item in "${_array_new[@]}"; do
-    echo "hurr"
     if [[ "${_item}" != "" ]]; then
       _array_temp+=(
         "${_item}"
@@ -387,8 +386,8 @@ _array_remove() {
     unset \
       "${_array_name}"
     declare \
-      -a \
       -g \
+      -a \
       "${_array_name}"
   fi
 }
