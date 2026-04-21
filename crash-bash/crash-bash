@@ -352,7 +352,7 @@ _array_remove() {
     _removed_flag="false"
     for _item in "${!_ref}"; do
       if [[ "${_item}" != "${_target_item}" && \
-            "${_item}" == "" ]]; then
+            "${_item}" != "" ]]; then
         _array_new+=(
           "${_item}"
         )
@@ -369,6 +369,7 @@ _array_remove() {
     done
   fi
   for _item in "${_array_new[@]}"; do
+    echo "hurr"
     if [[ "${_item}" != "" ]]; then
       _array_temp+=(
         "${_item}"
