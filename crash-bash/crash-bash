@@ -315,6 +315,8 @@ _array_remove() {
     _ref_item \
     _index \
     _item \
+    _array_new=() \
+    _array_temp=() \
     _mapfile_opts=()
   _item_type="value"
   _remove_all="true"
@@ -330,7 +332,6 @@ _array_remove() {
   )
   _ref="${_array_name}[@]"
   _ref_size="${_array_name}[@]"
-  _array_new=()
   _size="${!_ref_size}"
   if [[ "${_item_type}" == "index" ]]; then
     _index=0
@@ -350,7 +351,8 @@ _array_remove() {
   elif [[ "${_item_type}" == "value" ]]; then
     _removed_flag="false"
     for _item in "${!_ref}"; do
-      if [[ "${_item}" != "${_target_item}" ]]; then
+      if [[ "${_item}" != "${_target_item}" && \
+            "${_item}" == "" ]]; then
         _array_new+=(
           "${_item}"
         )
@@ -366,12 +368,25 @@ _array_remove() {
       fi
     done
   fi
-  mapfile \
-    "${_mapfile_opts[@]}" \
-    "${_array_name}" < <( \
-      printf \
-        '%s\0' \
-        "${_array_new[@]}")
+  for _item in "${_array_new[@]}"; do
+    if [[ "${_item}" != "" ]]; then
+      _array_temp+=(
+        "${_item}"
+      )
+    fi
+  done
+  if (( 0 < "${#_array_temp[@]}" )); then
+    mapfile \
+      "${_mapfile_opts[@]}" \
+      "${_array_name}" < <( \
+        printf \
+          '%s\0' \
+          "${_array_temp[@]}")
+  else
+    declare \
+      -g \
+      "${_array_name}"=()
+  fi
 }
 
 _check_cmd(){
