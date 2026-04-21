@@ -383,8 +383,10 @@ _array_remove() {
           '%s\0' \
           "${_array_temp[@]}")
   else
-    unset \
-      "${_array_name}"
+    printf \
+      -v \
+        "${_array_name}" \
+      ""
     declare \
       -g \
       -a \
