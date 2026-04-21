@@ -302,6 +302,74 @@ _array_set() {
         "${!_ass[@]}")
 }
 
+_array_remove() {
+  local \
+    _array_name="${1}" \
+    _target_item="${2}" \
+    _item_type \
+    _remove_all \
+    _ref \
+    _ref_item \
+    _index \
+    _item \
+    _mapfile_opts=()
+  _item_type="value"
+  _remove_all="true"
+  if (( 2 < "${#}"  )); then
+    _item_type="${3}"
+  fi
+  if (( 3 < "${#}"  )); then
+    _remove_all="${3}"
+  fi
+  _mapfile_opts+=(
+    -d
+      $'\0'
+  )
+  _ref="${_array_name}[@]"
+  _ref_size="${_array_name}[@]"
+  _array_new=()
+  _size="${!_ref_size}"
+  if [[ "${_item_type}" == "index" ]]; then
+    _index=0
+    for _item in "${!_ref}"; do
+      _ref_item="${_array_name}[${_index}]"
+      if [[ "${_index}" != "${_target_item}" ]]; then
+        _array_new+=(
+          "${!_ref_item}"
+        )
+      else
+      fi || \
+      true
+      _index="$((
+        _index + 1 ))"
+    done
+  elif [[ "${_item_type}" == "value" ]]; then
+    _removed_flag="false"
+    for _item in "${!_ref}"; do
+      if [[ "${_item}" != "${_target_item}" ]]; then
+        _array_new+=(
+          "${_item}"
+        )
+      elif [[ "${_item}" == "${_target_item}" ]]; then
+        _removed_flag="true"
+        if [[ "${_remove_all}" == "false" ]]; then
+          if [[ "${_removed_flag}" == "true" ]]; then
+            _array_new+=(
+              "${_item}"
+            )
+          fi
+        fi
+      fi
+    done
+  fi
+  mapfile \
+    "${_mapfile_opts[@]}" \
+    "${_array_name}" < <( \
+      printf \
+        '%s\0' \
+        "${_array_new[@]}")
+}
+
 _check_cmd(){
   local \
     _cmd="${1}" \
