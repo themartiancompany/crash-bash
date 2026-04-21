@@ -384,8 +384,9 @@ _array_remove() {
           "${_array_temp[@]}")
   else
     declare \
+      -a \
       -g \
-      "${_array_name}"=()
+      "${_array_name}"
   fi
 }
 
