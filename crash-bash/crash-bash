@@ -379,7 +379,8 @@ _check_cmd(){
     _cmd="${1}" \
     _cmd_var \
     _flag="" \
-    _pkgs=()
+    _pkgs=() \
+    _msg=()
   shift \
     1
   _pkgs=(
@@ -393,7 +394,8 @@ _check_cmd(){
         "s/[-,.]/_/g")"
   command \
      -v \
-     "${_cmd}" &> /dev/null && \
+     "${_cmd}" &> \
+     "/dev/null" && \
     printf \
       -v \
         "_${_cmd_var}" \
@@ -413,8 +415,11 @@ _check_cmd(){
     if [[ "${_pkgs[*]}" != "" ]]; then
       _cmd="${_pkgs[*]}"
     fi
+    _msg=(
+      "Install '${_cmd}'."
+    )
     _msg_error \
-      "Install '${_cmd}'." \
+      "${_msg[*]}" \
       1
   fi
 }
@@ -438,10 +443,9 @@ _set_override() {
       "$(_get \
 	   "override_${_obj}" \
            "${_var}")"
-  elif [[ -z \
-	    "$(_get \
-	         "${_obj}" \
-                 "${_var}")" ]]; then
+  elif [[ -z "$(_get \
+	          "${_obj}" \
+                  "${_var}")" ]]; then
     _set \
       "${_obj}" \
       "${_var}" \
@@ -460,15 +464,19 @@ _override_path() {
     _obj="${1}" \
     _var="${2}" \
     _value="${3}" \
-    _path
+    _path \
+    _msg=()
   _path="$(
     realpath \
       -q -- \
       "${_value}" || \
       true)"
   [[ "${_path}" == "" ]] && \
+    _msg=(
+      "'${_value}' is not a valid path."
+    )
     _msg_error \
-      "'${_value}' is not a valid path." \
+      "${_msg[*]}" \
       1
   _set_override \
     "${_obj}" \
@@ -548,7 +556,8 @@ _printf() {
     _pygmentize_opts=()
   _pygmentize_opts=(
     -g
-    -O style=emacs
+    -O
+      "style=emacs"
   )
   _args=(
       "$@"
@@ -727,7 +736,7 @@ _kill_timeout() {
   if ps \
        -p \
        "${_pid}" > \
-       /dev/null; then
+       "/dev/null"; then
      kill \
        -INT \
        "${_pid}" || \
@@ -759,8 +768,11 @@ _run() {
   _timeout_delay=3
   _pid="$(
     mktemp)"
-  _msg_info \
+  _msg=(
     "Running '${_name}'."
+  )
+  _msg_info \
+    "${_msg[*]}"
   if [[ "${_timeout}" != ""  ]] && \
      [[ "${_timeout}" != 0  ]]; then
     _msg=(
@@ -770,10 +782,16 @@ _run() {
     _msg_info \
       "${_msg[*]}"
   fi
-  _msg_info \
+  _msg=(
     "Command for '${_name}': '${_cmd[*]}'"
+  )
   _msg_info \
+    "${_msg[*]}"
+  _msg=(
     "Pid file for '${_name}': ${_pid} "
+  )
+  _msg_info \
+    "${_msg[*]}"
   _set \
     "${_name}" \
     "pid" \
@@ -782,10 +800,13 @@ _run() {
     echo \
       "$!" > \
       "${_pid}"
+  _msg=(
+    "Process '${_name}' running with pid"
+    "'$(_get_pid \
+         "${_name}")'."
+  )
   _msg_info \
-    "Process '${_name}' running with pid $(
-      _get_pid \
-        "${_name}")"
+    "${_msg[*]}"
   if [[ "${_timeout}" != "" ]] && \
      [[ "${_timeout}" != 0  ]]; then
     _kill_timeout \
@@ -823,11 +844,17 @@ _get_tmp() {
 }
 
 _require_root() {
+  local \
+    _msg=()
   if (( EUID != 0 )); then
-    _msg_error \
+    _msg=(
       "$(_get \
            "app" \
-           "name") must be run as root." \
+           "name")"
+      "must be run as root."
+    )
+    _msg_error \
+      "${_msg[*]}" \
       1
   fi
 }
