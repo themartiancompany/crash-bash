@@ -601,25 +601,25 @@ _config_user_init() {
 
 _options_load() {
   local \
-    _name="${1}"
+    _name="${1}" \
+    _msg=()
   _set \
     "${_name}" \
     "options" \
-    "${HOME}/.config/$(
-      _get \
-        "app" \
-        "name")/${_name}_options"
+    "${HOME}/.config/${app_name}/${_name}_options"
   if [[ -e "$(_get \
 	       "${_name}" \
                "options")" ]]; then
     source \
-      "$(
-        _get \
-	  "${_name}" \
-	  "options")"
+      "$(_get \
+	   "${_name}" \
+	   "options")"
   else
-    _msg_info \
+    _msg=(
       "No config for '${_name}'."
+    )
+    _msg_info \
+      "${_msg[*]}"
   fi
 }
 
